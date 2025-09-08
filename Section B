@@ -1,0 +1,104 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Person{
+    private final String name;
+    private final int age;
+
+    public Person(String name, int age){
+        this.name =name;
+        this.age =age;
+    }
+    public String getName(){return name;}
+    public int getAge(){return age;}
+}
+class Player extends Person{
+    private final String position;
+    private final int goals;
+    private final int matches;
+
+    public Player(String name, int age, String position, int goals, int matches){
+        super(name,age);
+        this.position = position;
+        this.goals = goals;
+        this.matches = matches;
+    }
+
+    public String getPosition(){return position;}
+    public int getGoals(){return goals;}
+    public int getMatches(){return matches;}
+
+    public double getAverageGoals(){
+        if (matches == 0) return 0;
+        return (double) goals / matches;
+    }
+}
+
+class Team{
+    private ArrayList <Player> players;
+    public Team(){
+        players = new ArrayList<>();
+    }
+    public void addPlayer(Player x){
+        players.add(x);
+    }
+    public void showReport(){
+        System.out.println("=====Soccer Team Report=====");
+        for (Player x : players){
+            System.out.println("Player: " + x.getName() + " | Position: " + x.getPosition() + " | Goals: " + x.getGoals() + " | Matches: " + x.getMatches() + "| Avg Goals: " + x.getAverageGoals());
+        }
+    }
+    public Player getTopScorer(){
+        if (players.isEmpty()) return null;
+        Player top = players.get(0);
+        for (Player x : players){
+            if (x.getGoals() > top.getGoals()){
+                top =x;
+            }
+        }
+        return top;
+    }
+}
+
+public class SoccerManagement {
+    public static void main(String[]args){
+        Scanner input = new Scanner(System.in);
+        Team team = new Team();
+
+        System.out.print("How many players do you want to add? ");
+        int numPlayers = input.nextInt();
+        input.nextLine();
+        for (int i = 0; i < numPlayers; i++){
+            System.out.println("\nEnter details for Player " + (i + 1));
+
+            System.out.print("Name: ");
+            String name = input.nextLine();
+
+            System.out.print("Age: ");
+            int age = input.nextInt();
+            input.nextLine(); // consume newline
+
+            System.out.print("Position (Goalkeeper/Defender/Midfielder/Forward): ");
+            String position = input.nextLine();
+
+            System.out.print("Goals: ");
+            int goals = input.nextInt();
+
+            System.out.print("Matches: ");
+            int matches = input.nextInt();
+            input.nextLine();
+
+            // Create and add player
+            Player player = new Player(name, age, position, goals, matches);
+            team.addPlayer(player);
+        }
+        team.showReport();
+
+        // Show top scorer
+        Player top = team.getTopScorer();
+        if (top != null) {
+            System.out.println("----------------------------------");
+            System.out.println("Top Scorer: " + top.getName() + " with " + top.getGoals() + " goals");
+        }
+    }
+        }
